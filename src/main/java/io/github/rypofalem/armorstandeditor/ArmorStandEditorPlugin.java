@@ -85,7 +85,7 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
 		hasSpigot = true;
 		try {
-			Class.forName("org.spigotmc.package-info", false, this.getClassLoader());
+			Class.forName("org.spigotmc.CustomTimingsHandler", false, this.getClassLoader());
 		} catch (ClassNotFoundException e) {
 			hasSpigot = false;
 		}
