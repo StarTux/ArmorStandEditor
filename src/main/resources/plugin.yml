@@ -1,22 +1,39 @@
-name: ArmorStandEditor
 main: io.github.rypofalem.armorstandeditor.ArmorStandEditorPlugin
+name: ArmorStandEditor
+
 version: 1.17-25
-api-version: "1.17"
+api-version: 1.17
+
 website: rypofalem.github.io
 author: RypoFalem
 description: Allows players to edit data of armorstands without any commands.
+
+depend: [Core]
+softdepend: []
+
 commands:
   ase:
     description: Changes the function of the armorstand edit tool.
     usage: /<command> ? - list subcommands
     permission: asedit.basic
 permissions:
-    asedit.basic:
-      description: Allow use armorstand edit functions. If set to false it will override all other functions.
-      default: true
-    asedit.invisible:
-      description: Toggle armorstand visible/invisible.
-      default: true
-    asedit.rename:
-      description: Rename armorstands
-      default: true
+
+  asedit.basic:
+    description: Allow use armorstand edit functions. If set to false it will override all other functions.
+    default: op
+
+  asedit.invisible:
+    description: Toggle armorstand visible/invisible.
+    default: op
+
+  asedit.rename:
+    description: Rename armorstands
+    default: op
+
+  asedit.rename.color:
+    description: Use color codes
+    default: op
+
+  asedit.rename.emoji:
+    description: Use emoji
+    default: op

@@ -19,7 +19,10 @@
 
 package io.github.rypofalem.armorstandeditor;
 
+import com.cavetale.core.font.Emoji;
+import com.cavetale.core.font.GlyphPolicy;
 import io.github.rypofalem.armorstandeditor.menu.ASEHolder;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -100,35 +103,35 @@ public class PlayerEditorManager implements Listener{
         //Attempt rename
         if(player.getInventory().getItemInMainHand().getType() == Material.NAME_TAG && player.hasPermission("asedit.rename")){
             ItemStack nameTag = player.getInventory().getItemInMainHand();
-            final String name;
+            final Component displayName;
             if(nameTag.getItemMeta() != null && nameTag.getItemMeta().hasDisplayName()){
-                name = nameTag.getItemMeta().getDisplayName().replace('&', ChatColor.COLOR_CHAR);
+                String name = nameTag.getItemMeta().getDisplayName();
+                if (name != null && player.hasPermission("asedit.rename.color")) {
+                    name = ChatColor.translateAlternateColorCodes('&', name);
+                }
+                if (name != null && player.hasPermission("asedit.rename.emoji")) {
+                    displayName = Emoji.replaceText(name, GlyphPolicy.PUBLIC, false).asComponent();
+                } else {
+                    displayName = name != null && !name.isEmpty() ? Component.text(name) : null;
+                }
             } else {
-                name = null;
+                displayName = null;
             }
-
-            if(name == null){
+            if(displayName == null){
                 as.setCustomName(null);
                 as.setCustomNameVisible(false);
                 event.setCancelled(true);
-            } else if(!name.equals("")){ // nametag is not blank
+            } else {
                 event.setCancelled(true);
-
                 if((player.getGameMode() != GameMode.CREATIVE)){
-                    if(nameTag.getAmount() > 1){
-                        nameTag.setAmount(nameTag.getAmount() - 1);
-                    }else{
-                        nameTag = new ItemStack(Material.AIR);
-                    }
-                    player.getInventory().setItemInMainHand(nameTag);
+                    nameTag.subtract(1);
                 }
-
                 //minecraft will set the name after this event even if the event is cancelled.
                 //change it 1 tick later to apply formatting without it being overwritten
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        as.setCustomName(name);
-                        as.setCustomNameVisible(false);
-                    }, 1);
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                        as.customName(displayName);
+                        as.setCustomNameVisible(true);
+                    });
             }
         }
     }

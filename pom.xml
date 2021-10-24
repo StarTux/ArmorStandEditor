@@ -5,7 +5,7 @@
   <artifactId>armorstandeditor</artifactId>
   <packaging>jar</packaging>
   <version>1.17-25</version>
-  <name>armorstandeditor</name>
+  <name>ArmorStandEditor</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -13,6 +13,12 @@
   </properties>
 
   <repositories>
+
+    <!-- Cavetale Repo -->
+    <repository>
+      <id>cavetale</id>
+      <url>https://cavetale.com/jenkins/plugin/repository/everything/</url>
+    </repository>
 
     <!-- Paper Repo -->
     <repository>
@@ -28,6 +34,14 @@
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
       <version>1.17.1-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Core -->
+    <dependency>
+      <groupId>com.cavetale.core</groupId>
+      <artifactId>core</artifactId>
+      <version>0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
 
