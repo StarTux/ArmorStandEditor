@@ -8,7 +8,7 @@ website: rypofalem.github.io
 author: RypoFalem
 description: Allows players to edit data of armorstands without any commands.
 
-depend: [Core]
+depend: [Core, Mytems]
 softdepend: []
 
 commands:
