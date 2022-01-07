@@ -1,6 +1,6 @@
 /*
  * ArmorStandEditor: Bukkit plugin to allow editing armor stand attributes
- * Copyright (C) 2016  RypoFalem
+ * Copyright (C) 2016-2021 RypoFalem
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,17 +20,33 @@
 package io.github.rypofalem.armorstandeditor.modes;
 
 public enum EditMode {
-	NONE("None"), INVISIBLE("Invisible"), SHOWARMS("ShowArms"), GRAVITY("Gravity"), BASEPLATE("BasePlate"), SIZE("Size"), COPY("Copy"), PASTE("Paste"),
-	HEAD("Head"), BODY("Body"), LEFTARM("LeftArm"), RIGHTARM("RightArm"), LEFTLEG("LeftLeg"), RIGHTLEG("RightLeg"),
-	PLACEMENT("Placement"), DISABLESLOTS("DisableSlots"), ROTATE("Rotate"), EQUIPMENT("Equipment"), RESET("Reset");
-	
-	private String name;
-	
-	EditMode(String name){
-		this.name = name;
-	}
-	
-	public String toString(){
-		return name;
-	}
+    NONE("None"),
+    INVISIBLE("Invisible"),
+    SHOWARMS("ShowArms"),
+    GRAVITY("Gravity"),
+    BASEPLATE("BasePlate"),
+    SIZE("Size"),
+    COPY("Copy"),
+    PASTE("Paste"),
+    HEAD("Head"),
+    BODY("Body"),
+    LEFTARM("LeftArm"),
+    RIGHTARM("RightArm"),
+    LEFTLEG("LeftLeg"),
+    RIGHTLEG("RightLeg"),
+    PLACEMENT("Placement"),
+    DISABLESLOTS("DisableSlots"),
+    ROTATE("Rotate"),
+    EQUIPMENT("Equipment"),
+    RESET("Reset");
+
+    private String name;
+
+    EditMode(final String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return name;
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * ArmorStandEditor: Bukkit plugin to allow editing armor stand attributes
- * Copyright (C) 2016  RypoFalem
+ * Copyright (C) 2016-2021 RypoFalem
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,13 @@ import com.cavetale.mytems.Mytems;
 import io.github.rypofalem.armorstandeditor.language.Language;
 import java.io.File;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ArmorStandEditorPlugin extends JavaPlugin{
+public final class ArmorStandEditorPlugin extends JavaPlugin {
     private NamespacedKey iconKey;
     private static ArmorStandEditorPlugin instance;
     private CommandEx execute;
@@ -41,12 +40,12 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
     double coarseRot;
     double fineRot;
 
-    public ArmorStandEditorPlugin(){
+    public ArmorStandEditorPlugin() {
         instance = this;
     }
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         //saveResource doesn't accept File.seperator on windows, need to hardcode unix seperator "/" instead
         updateConfig("", "config.yml");
         updateConfig("lang/", "test_NA.yml");
@@ -73,55 +72,55 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
     }
 
     private void updateConfig(String folder, String config) {
-        if(!new File(getDataFolder() + File.separator + folder + config).exists()){
+        if (!new File(getDataFolder() + File.separator + folder + config).exists()) {
             saveResource(folder  + config, false);
         }
     }
 
     @Override
-    public void onDisable(){
-        for(Player player : Bukkit.getServer().getOnlinePlayers()){
-            if(player.getOpenInventory().getTopInventory().getHolder() == editorManager.getMenuHolder()) player.closeInventory();
+    public void onDisable() {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            if (player.getOpenInventory().getTopInventory().getHolder() == editorManager.getMenuHolder()) player.closeInventory();
         }
     }
 
-    public void log(String message){
+    public void log(String message) {
         this.getServer().getLogger().info("ArmorStandEditor: " + message);
     }
 
-    public void print(String message){
-        if(debug){
+    public void print(String message) {
+        if (debug) {
             this.getServer().broadcastMessage(message);
             log(message);
         }
     }
 
-    public String listPlugins(){
+    public String listPlugins() {
         Plugin[] plugins = getServer().getPluginManager().getPlugins();
         StringBuilder list = new StringBuilder();
-        for(Plugin p : plugins){
-            if(p!=null){
+        for (Plugin p : plugins) {
+            if (p != null) {
                 list.append(" :").append(p.getName()).append(" ").append(p.getDescription().getVersion()).append(": ");
             }
         }
         return list.toString();
     }
 
-    public static ArmorStandEditorPlugin instance(){
+    public static ArmorStandEditorPlugin instance() {
         return instance;
     }
 
-    public Language getLang(){
+    public Language getLang() {
         return lang;
     }
-	
-    public boolean isEditTool(ItemStack item){
+
+    public boolean isEditTool(ItemStack item) {
         if (item == null) return false;
         return Mytems.forItem(item) == Mytems.ARMOR_STAND_EDITOR;
     }
 
     public NamespacedKey getIconKey() {
-        if(iconKey == null) iconKey = new NamespacedKey(this, "command_icon");
+        if (iconKey == null) iconKey = new NamespacedKey(this, "command_icon");
         return iconKey;
     }
 }
