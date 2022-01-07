@@ -19,7 +19,9 @@
 
 package io.github.rypofalem.armorstandeditor;
 
+import com.cavetale.mytems.Mytems;
 import io.github.rypofalem.armorstandeditor.language.Language;
+import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -28,20 +30,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-
 public class ArmorStandEditorPlugin extends JavaPlugin{
     private NamespacedKey iconKey;
     private static ArmorStandEditorPlugin instance;
     private CommandEx execute;
     private Language lang;
     public PlayerEditorManager editorManager;
-    public Material editTool = Material.FLINT;
-    boolean requireToolData = false;
     boolean sendToActionBar = true;
-    int editToolData = Integer.MIN_VALUE;
-    boolean requireToolLore = false;
-    String editToolLore = null;
     boolean debug = false; //weather or not to broadcast messages via print(String message)
     double coarseRot;
     double fineRot;
@@ -68,12 +63,6 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
 
         coarseRot = getConfig().getDouble("coarse");
         fineRot = getConfig().getDouble("fine");
-        String toolType = getConfig().getString("tool", "FLINT");
-        editTool = Material.getMaterial(toolType);
-        requireToolData = getConfig().getBoolean("requireToolData", false);
-        if(requireToolData) editToolData = getConfig().getInt("toolData", Integer.MIN_VALUE);
-        requireToolLore = getConfig().getBoolean("requireToolLore", false);
-        if(requireToolLore) editToolLore= getConfig().getString("toolLore", null);
         debug = getConfig().getBoolean("debug", true);
         sendToActionBar = getConfig().getBoolean("sendMessagesToActionBar", true);
 
@@ -127,16 +116,8 @@ public class ArmorStandEditorPlugin extends JavaPlugin{
     }
 	
     public boolean isEditTool(ItemStack item){
-        if(item == null) return false;
-        if(editTool != item.getType()) return false;
-        if(requireToolData && item.getDurability() != (short)editToolData) return false;
-        if(requireToolLore && editToolLore != null){
-            if(!item.hasItemMeta()) return false;
-            if(!item.getItemMeta().hasLore()) return false;
-            if(item.getItemMeta().getLore().isEmpty()) return false;
-            if(!item.getItemMeta().getLore().get(0).equals(editToolLore)) return false;
-        }
-        return true;
+        if (item == null) return false;
+        return Mytems.forItem(item) == Mytems.ARMOR_STAND_EDITOR;
     }
 
     public NamespacedKey getIconKey() {

@@ -155,7 +155,7 @@ public class CommandEx implements CommandExecutor{
 	private void commandHelp(Player player){
 		player.closeInventory();
 		player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
-		player.sendMessage(plugin.getLang().getMessage("help", "info", plugin.editTool.name()));
+		player.sendMessage(plugin.getLang().getMessage("help", "info"));
 		player.sendMessage("");
 		player.sendMessage(plugin.getLang().getMessage("helptips", "info"));
 		player.sendMessage("");
