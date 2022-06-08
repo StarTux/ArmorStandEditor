@@ -34,11 +34,11 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     private static ArmorStandEditorPlugin instance;
     private CommandEx execute;
     private Language lang;
-    public PlayerEditorManager editorManager;
-    boolean sendToActionBar = true;
-    boolean debug = false; //weather or not to broadcast messages via print(String message)
-    double coarseRot;
-    double fineRot;
+    protected PlayerEditorManager editorManager;
+    protected boolean sendToActionBar = true;
+    protected boolean debug = false; //weather or not to broadcast messages via print(String message)
+    protected double coarseRot;
+    protected double fineRot;
 
     public ArmorStandEditorPlugin() {
         instance = this;

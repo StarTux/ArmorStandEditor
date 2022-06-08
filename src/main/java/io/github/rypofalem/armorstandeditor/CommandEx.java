@@ -29,150 +29,149 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandEx implements CommandExecutor{
-	ArmorStandEditorPlugin plugin;
-	final String LISTMODE = ChatColor.GREEN + "/ase mode <" + Util.getEnumList(EditMode.class) + ">";
-	final String LISTAXIS = ChatColor.GREEN + "/ase axis <" + Util.getEnumList(Axis.class) + ">";
-	final String LISTADJUSTMENT = ChatColor.GREEN + "/ase adj <" + Util.getEnumList(AdjustmentMode.class) + ">";
-	final String LISTSLOT =  ChatColor.GREEN + "/ase slot <1-9>";
-	final String HELP = ChatColor.GREEN + "/ase help";
+public final class CommandEx implements CommandExecutor {
+    ArmorStandEditorPlugin plugin;
+    protected static final String LISTMODE = ChatColor.GREEN + "/ase mode <" + Util.getEnumList(EditMode.class) + ">";
+    protected static final String LISTAXIS = ChatColor.GREEN + "/ase axis <" + Util.getEnumList(Axis.class) + ">";
+    protected static final String LISTADJUSTMENT = ChatColor.GREEN + "/ase adj <" + Util.getEnumList(AdjustmentMode.class) + ">";
+    protected static final String LISTSLOT =  ChatColor.GREEN + "/ase slot <1-9>";
+    protected static final String HELP = ChatColor.GREEN + "/ase help";
 
-	public CommandEx(ArmorStandEditorPlugin armorStandEditorPlugin) {
-		this.plugin = armorStandEditorPlugin;
-	}
+    public CommandEx(final ArmorStandEditorPlugin armorStandEditorPlugin) {
+        this.plugin = armorStandEditorPlugin;
+    }
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(!(sender instanceof Player
-				&& checkPermission((Player)sender,"basic",true))){
-			sender.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
-			return true;
-		}
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player
+             && checkPermission((Player) sender, "basic", true))) {
+            sender.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
+            return true;
+        }
+        Player player = (Player) sender;
+        if (args.length == 0) {
+            player.sendMessage(LISTMODE);
+            player.sendMessage(LISTAXIS);
+            player.sendMessage(LISTSLOT);
+            player.sendMessage(LISTADJUSTMENT);
+            return true;
+        }
+        switch (args[0].toLowerCase()) {
+        case "mode": commandMode(player, args);
+            break;
+        case "axis": commandAxis(player, args);
+            break;
+        case "adj": commandAdj(player, args);
+            break;
+        case "slot": commandSlot(player, args);
+            break;
+        case "help":
+        case "?": commandHelp(player);
+            break;
+        default:
+            sender.sendMessage(LISTMODE);
+            sender.sendMessage(LISTAXIS);
+            sender.sendMessage(LISTSLOT);
+            sender.sendMessage(LISTADJUSTMENT);
+            sender.sendMessage(HELP);
+        }
+        return true;
+    }
 
-		Player player = (Player) sender;
-		if(args.length == 0){
-			player.sendMessage(LISTMODE);
-			player.sendMessage(LISTAXIS);
-			player.sendMessage(LISTSLOT);
-			player.sendMessage(LISTADJUSTMENT);
-			return true;
-		}
-		switch(args[0].toLowerCase()){
-			case "mode": commandMode(player, args);
-				break;
-			case "axis": commandAxis(player, args);
-				break;
-			case "adj": commandAdj(player, args);
-				break;
-			case "slot": commandSlot(player, args);
-				break;
-			case "help":
-			case "?": commandHelp(player);
-				break;
-			default:
-				sender.sendMessage(LISTMODE);
-				sender.sendMessage(LISTAXIS);
-				sender.sendMessage(LISTSLOT);
-				sender.sendMessage(LISTADJUSTMENT);
-				sender.sendMessage(HELP);
-		}
-		return true;
-	}
+    private void commandSlot(Player player, String[] args) {
 
-	private void commandSlot(Player player, String[] args) {
+        if (args.length <= 1) {
+            player.sendMessage(plugin.getLang().getMessage("noslotnumcom", "warn"));
+            player.sendMessage(LISTSLOT);
+        }
 
-		if(args.length <=1){
-			player.sendMessage(plugin.getLang().getMessage("noslotnumcom", "warn"));
-			player.sendMessage(LISTSLOT);
-		}
+        if (args.length > 1) {
+            try {
+                byte slot = (byte) (Byte.parseByte(args[1]) - 0b1);
+                if (slot >= 0 && slot < 9) {
+                    plugin.editorManager.getPlayerEditor(player.getUniqueId()).setCopySlot(slot);
+                } else {
+                    player.sendMessage(LISTSLOT);
+                }
 
-		if(args.length > 1){
-			try{
-				byte slot = (byte) (Byte.parseByte(args[1]) - 0b1);
-				if(slot >= 0 && slot < 9){
-					plugin.editorManager.getPlayerEditor(player.getUniqueId()).setCopySlot(slot);
-				}else{
-					player.sendMessage(LISTSLOT);
-				}
+            } catch (NumberFormatException nfe) {
+                player.sendMessage(LISTSLOT);
+            }
+        }
+    }
 
-			}catch(NumberFormatException nfe){
-				player.sendMessage(LISTSLOT);
-			}
-		}
-	}
+    private void commandAdj(Player player, String[] args) {
+        if (args.length <= 1) {
+            player.sendMessage(plugin.getLang().getMessage("noadjcom", "warn"));
+            player.sendMessage(LISTADJUSTMENT);
+        }
 
-	private void commandAdj(Player player, String[] args) {
-		if(args.length <=1){
-			player.sendMessage(plugin.getLang().getMessage("noadjcom", "warn"));
-			player.sendMessage(LISTADJUSTMENT );
-		}
+        if (args.length > 1) {
+            for (AdjustmentMode adj : AdjustmentMode.values()) {
+                if (adj.toString().toLowerCase().contentEquals(args[1].toLowerCase())) {
+                    plugin.editorManager.getPlayerEditor(player.getUniqueId()).setAdjMode(adj);
+                    return;
+                }
+            }
+            player.sendMessage(LISTADJUSTMENT);
+        }
+    }
 
-		if(args.length > 1){
-			for(AdjustmentMode adj : AdjustmentMode.values()){
-				if(adj.toString().toLowerCase().contentEquals(args[1].toLowerCase())){
-					plugin.editorManager.getPlayerEditor(player.getUniqueId()).setAdjMode(adj);
-					return;
-				}
-			}
-			player.sendMessage(LISTADJUSTMENT);
-		}
-	}
+    private void commandAxis(Player player, String[] args) {
+        if (args.length <= 1) {
+            player.sendMessage(plugin.getLang().getMessage("noaxiscom", "warn"));
+            player.sendMessage(LISTAXIS);
+        }
 
-	private void commandAxis(Player player, String[] args) {
-		if(args.length <=1){
-			player.sendMessage(plugin.getLang().getMessage("noaxiscom", "warn"));
-			player.sendMessage(LISTAXIS);
-		}
+        if (args.length > 1) {
+            for (Axis axis : Axis.values()) {
+                if (axis.toString().toLowerCase().contentEquals(args[1].toLowerCase())) {
+                    plugin.editorManager.getPlayerEditor(player.getUniqueId()).setAxis(axis);
+                    return;
+                }
+            }
+            player.sendMessage(LISTAXIS);
+        }
+    }
 
-		if(args.length > 1){
-			for(Axis axis : Axis.values()){
-				if(axis.toString().toLowerCase().contentEquals(args[1].toLowerCase())){
-					plugin.editorManager.getPlayerEditor(player.getUniqueId()).setAxis(axis);
-					return;
-				}
-			}
-			player.sendMessage(LISTAXIS);
-		}
-	}
+    private void commandMode(Player player, String[] args) {
+        if (args.length <= 1) {
+            player.sendMessage(plugin.getLang().getMessage("nomodecom", "warn"));
+            player.sendMessage(LISTMODE);
+        }
 
-	private void commandMode(Player player, String[] args) {
-		if(args.length <=1){
-			player.sendMessage(plugin.getLang().getMessage("nomodecom", "warn"));
-			player.sendMessage(LISTMODE);
-		}
+        if (args.length > 1) {
+            for (EditMode mode : EditMode.values()) {
+                if (mode.toString().toLowerCase().contentEquals(args[1].toLowerCase())) {
+                    if (args[1].equals("invisible") && !checkPermission(player, "invisible", true)) return;
+                    plugin.editorManager.getPlayerEditor(player.getUniqueId()).setMode(mode);
+                    return;
+                }
+            }
+        }
+    }
 
-		if(args.length > 1){
-			for(EditMode mode : EditMode.values()){
-				if(mode.toString().toLowerCase().contentEquals(args[1].toLowerCase())){
-					if(args[1].equals("invisible") && !checkPermission(player, "invisible",true)) return;
-					plugin.editorManager.getPlayerEditor(player.getUniqueId()).setMode(mode);
-					return;
-				}
-			}
-		}
-	}
+    private void commandHelp(Player player) {
+        player.closeInventory();
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+        player.sendMessage(plugin.getLang().getMessage("help", "info"));
+        player.sendMessage("");
+        player.sendMessage(plugin.getLang().getMessage("helptips", "info"));
+        player.sendMessage("");
+        player.sendRawMessage(plugin.getLang().getMessage("helpurl", ""));
+    }
 
-	private void commandHelp(Player player){
-		player.closeInventory();
-		player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
-		player.sendMessage(plugin.getLang().getMessage("help", "info"));
-		player.sendMessage("");
-		player.sendMessage(plugin.getLang().getMessage("helptips", "info"));
-		player.sendMessage("");
-		player.sendRawMessage(plugin.getLang().getMessage("helpurl", ""));
-	}
-
-	private boolean checkPermission(Player player, String permName, boolean sendMessageOnInvalidation){
-		if(permName.toLowerCase().equals("paste")){
-			permName = "copy";
-		}
-		if(player.hasPermission("asedit." + permName.toLowerCase())){
-			return true;
-		}else{
-			if(sendMessageOnInvalidation){
-				player.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
-			}
-			return false;
-		}
-	}
+    private boolean checkPermission(Player player, String permName, boolean sendMessageOnInvalidation) {
+        if (permName.toLowerCase().equals("paste")) {
+            permName = "copy";
+        }
+        if (player.hasPermission("asedit." + permName.toLowerCase())) {
+            return true;
+        } else {
+            if (sendMessageOnInvalidation) {
+                player.sendMessage(plugin.getLang().getMessage("noperm", "warn"));
+            }
+            return false;
+        }
+    }
 }

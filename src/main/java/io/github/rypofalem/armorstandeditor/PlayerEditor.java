@@ -224,7 +224,7 @@ public final class PlayerEditor {
 
     private void copy(ArmorStand armorStand) {
         copySlots.copyDataToSlot(armorStand);
-        sendMessage("copied", "" + (copySlots.currentSlot + 1));
+        sendMessage("copied", "" + (copySlots.getCurrentSlot() + 1));
         setMode(EditMode.PASTE);
     }
 
@@ -250,11 +250,11 @@ public final class PlayerEditor {
             armorStand.getEquipment().setItemInMainHand(data.rightHand);
             armorStand.getEquipment().setItemInOffHand(data.leftHand);
         }
-        sendMessage("pasted", "" + (copySlots.currentSlot + 1));
+        sendMessage("pasted", "" + (copySlots.getCurrentSlot() + 1));
     }
 
     private void toggleDisableSlots(ArmorStand armorStand) {
-        // TODO???
+        // ???
     }
 
     private void toggleGravity(ArmorStand armorStand) {
