@@ -126,17 +126,17 @@ public final class Menu {
                             "rotate", "mode rotate");
         equipment = createIcon(new ItemStack(Material.CHEST, 1),
                                "equipment", "mode equipment");
-        copy = createIcon(new ItemStack(Material.WRITABLE_BOOK),
+        copy = createIcon(Mytems.MAGNET.createIcon(),
                           "copy", "mode copy");
-        paste = createIcon(new ItemStack(Material.ENCHANTED_BOOK),
+        paste = createIcon(Mytems.BLACK_PAINTBRUSH.createIcon(),
                            "paste", "mode paste");
-        slot1 = createIcon(new ItemStack(Material.DANDELION),
+        slot1 = createIcon(Mytems.NUMBER_1.createIcon(),
                            "copyslot", "slot 1", "1");
-        slot2 = createIcon(new ItemStack(Material.AZURE_BLUET, 2),
+        slot2 = createIcon(Mytems.NUMBER_2.createIcon(),
                            "copyslot", "slot 2", "2");
-        slot3 = createIcon(new ItemStack(Material.BLUE_ORCHID, 3),
+        slot3 = createIcon(Mytems.NUMBER_3.createIcon(),
                            "copyslot", "slot 3", "3");
-        slot4 = createIcon(new ItemStack(Material.PEONY, 4),
+        slot4 = createIcon(Mytems.NUMBER_4.createIcon(),
                            "copyslot", "slot 4", "4");
         help = createIcon(Mytems.QUESTION_MARK.createIcon(),
                           "helpgui", "help");
