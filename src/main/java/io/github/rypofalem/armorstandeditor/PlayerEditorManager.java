@@ -56,6 +56,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
+import static net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText;
 
 //Manages PlayerEditors and Player Events related to editing armorstands
 public final class PlayerEditorManager implements Listener {
@@ -118,7 +119,7 @@ public final class PlayerEditorManager implements Listener {
             ItemStack nameTag = player.getInventory().getItemInMainHand();
             final Component displayName;
             if (nameTag.getItemMeta() != null && nameTag.getItemMeta().hasDisplayName()) {
-                String name = nameTag.getItemMeta().getDisplayName();
+                String name = plainText().serialize(nameTag.getItemMeta().displayName());
                 if (name != null && player.hasPermission("asedit.rename.color")) {
                     name = ChatColor.translateAlternateColorCodes('&', name);
                 }
@@ -131,7 +132,7 @@ public final class PlayerEditorManager implements Listener {
                 displayName = null;
             }
             if (displayName == null) {
-                as.setCustomName(null);
+                as.customName(null);
                 as.setCustomNameVisible(false);
                 event.setCancelled(true);
             } else {

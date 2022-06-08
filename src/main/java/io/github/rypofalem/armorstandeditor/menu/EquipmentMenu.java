@@ -20,6 +20,7 @@
 package io.github.rypofalem.armorstandeditor.menu;
 
 import io.github.rypofalem.armorstandeditor.PlayerEditor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -29,6 +30,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import static net.kyori.adventure.text.Component.text;
 
 import java.util.ArrayList;
 
@@ -43,7 +45,7 @@ public class EquipmentMenu {
 		this.pe = pe;
 		this.armorstand = as;
 		name = pe.plugin.getLang().getMessage("equiptitle", "menutitle");
-		menuInv = Bukkit.createInventory(pe.getManager().getEquipmentHolder(), 18, name);
+		menuInv = Bukkit.createInventory(pe.getManager().getEquipmentHolder(), 18, text(name));
 	}
 	
 	private void fillInventory(){
@@ -60,7 +62,7 @@ public class EquipmentMenu {
 		
 		ItemStack disabledIcon = new ItemStack(Material.BARRIER);
 		ItemMeta meta = disabledIcon.getItemMeta();
-		meta.setDisplayName(pe.plugin.getLang().getMessage("disabled", "warn")); //equipslot.msg <option>
+		meta.displayName(text(pe.plugin.getLang().getMessage("disabled", "warn"))); //equipslot.msg <option>
 		meta.getPersistentDataContainer().set(pe.plugin.getIconKey(), PersistentDataType.STRING, "ase icon"); // mark as icon
 		disabledIcon.setItemMeta(meta);
 		
@@ -81,10 +83,10 @@ public class EquipmentMenu {
 		ItemStack icon = new ItemStack(mat);
 		ItemMeta meta = icon.getItemMeta();
 		meta.getPersistentDataContainer().set(pe.plugin.getIconKey(), PersistentDataType.STRING, "ase icon");
-		meta.setDisplayName(pe.plugin.getLang().getMessage("equipslot", "iconname", slot)); //equipslot.msg <option>
-		ArrayList<String> loreList = new ArrayList<>();
-		loreList.add(pe.plugin.getLang().getMessage("equipslot.description", "icondescription", slot)); //equioslot.description.msg <option>
-		meta.setLore(loreList);
+		meta.displayName(text(pe.plugin.getLang().getMessage("equipslot", "iconname", slot))); //equipslot.msg <option>
+		ArrayList<Component> loreList = new ArrayList<>();
+		loreList.add(text(pe.plugin.getLang().getMessage("equipslot.description", "icondescription", slot))); //equioslot.description.msg <option>
+		meta.lore(loreList);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 		icon.setItemMeta(meta);

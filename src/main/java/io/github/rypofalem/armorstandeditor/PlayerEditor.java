@@ -29,7 +29,7 @@ import io.github.rypofalem.armorstandeditor.modes.EditMode;
 import java.util.ArrayList;
 import java.util.UUID;
 import lombok.Getter;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -37,6 +37,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
+import static net.kyori.adventure.text.Component.text;
 
 public final class PlayerEditor {
     public final ArmorStandEditorPlugin plugin;
@@ -361,9 +362,9 @@ public final class PlayerEditor {
     }
 
     void sendMessage(String path, String format, String option) {
-        String message = plugin.getLang().getMessage(path, format, option);
+        Component message = text(plugin.getLang().getMessage(path, format, option));
         if (plugin.sendToActionBar) {
-            plugin.getServer().getPlayer(getUUID()).sendActionBar(new TextComponent(message));
+            plugin.getServer().getPlayer(getUUID()).sendActionBar(message);
         } else {
             plugin.getServer().getPlayer(getUUID()).sendMessage(message);
         }

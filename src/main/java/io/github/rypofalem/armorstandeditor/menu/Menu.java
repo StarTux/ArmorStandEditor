@@ -24,6 +24,7 @@ import com.cavetale.mytems.Mytems;
 import io.github.rypofalem.armorstandeditor.ArmorStandEditorPlugin;
 import io.github.rypofalem.armorstandeditor.PlayerEditor;
 import java.util.ArrayList;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -202,10 +203,10 @@ public final class Menu {
     private ItemStack createIcon(ItemStack icon, String path, String command, String option) {
         ItemMeta meta = icon.getItemMeta();
         meta.getPersistentDataContainer().set(ArmorStandEditorPlugin.instance().getIconKey(), PersistentDataType.STRING, "ase " + command);
-        meta.setDisplayName(getIconName(path, option));
-        ArrayList<String> loreList = new ArrayList<>();
-        loreList.add(getIconDescription(path, option));
-        meta.setLore(loreList);
+        meta.displayName(text(getIconName(path, option)));
+        ArrayList<Component> loreList = new ArrayList<>();
+        loreList.add(text(getIconDescription(path, option)));
+        meta.lore(loreList);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         icon.setItemMeta(meta);
