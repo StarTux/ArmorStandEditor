@@ -24,7 +24,9 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +35,9 @@ import org.bukkit.persistence.PersistentDataType;
 import static net.kyori.adventure.text.Component.text;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 public final class EquipmentMenu {
@@ -40,12 +45,6 @@ public final class EquipmentMenu {
     private PlayerEditor pe;
     private ArmorStand armorstand;
     static String name = "ArmorStand Equipment";
-    ItemStack helmet;
-    ItemStack chest;
-    ItemStack pants;
-    ItemStack feetsies;
-    ItemStack rightHand;
-    ItemStack leftHand;
 
     public EquipmentMenu(final PlayerEditor pe, final ArmorStand as) {
         this.pe = pe;
@@ -104,18 +103,36 @@ public final class EquipmentMenu {
     }
 
     public void equipArmorstand() {
-        helmet = menuInv.getItem(9);
-        chest = menuInv.getItem(10);
-        pants = menuInv.getItem(11);
-        feetsies = menuInv.getItem(12);
-        rightHand = menuInv.getItem(13);
-        leftHand = menuInv.getItem(14);
-        armorstand.getEquipment().setHelmet(helmet);
-        armorstand.getEquipment().setChestplate(chest);
-        armorstand.getEquipment().setLeggings(pants);
-        armorstand.getEquipment().setBoots(feetsies);
-        armorstand.getEquipment().setItemInMainHand(rightHand);
-        armorstand.getEquipment().setItemInOffHand(leftHand);
+        Map<EquipmentSlot, ItemStack> items = new EnumMap<>(EquipmentSlot.class);
+        items.put(EquipmentSlot.HEAD, menuInv.getItem(9));
+        items.put(EquipmentSlot.CHEST, menuInv.getItem(10));
+        items.put(EquipmentSlot.LEGS, menuInv.getItem(11));
+        items.put(EquipmentSlot.FEET, menuInv.getItem(12));
+        items.put(EquipmentSlot.HAND, menuInv.getItem(13));
+        items.put(EquipmentSlot.OFF_HAND, menuInv.getItem(14));
+        List<ItemStack> retour = new ArrayList<>();
+        EntityEquipment equipment = requireNonNull(armorstand.getEquipment());
+        if (!armorstand.isValid() || armorstand.isDead()) {
+            retour.addAll(items.values());
+        } else {
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                ItemStack item = items.get(slot);
+                if (item == null || item.getType().isAir()) continue;
+                ItemStack oldItem = equipment.getItem(slot);
+                if (oldItem != null && !oldItem.getType().isAir()) {
+                    retour.add(item);
+                } else {
+                    equipment.setItem(slot, item);
+                }
+            }
+        }
+        Player player = pe.getPlayer();
+        for (ItemStack item : retour) {
+            if (item == null || item.getType().isAir()) continue;
+            for (ItemStack drop : player.getInventory().addItem(item).values()) {
+                player.getWorld().dropItem(player.getEyeLocation(), drop).setPickupDelay(0);
+            }
+        }
     }
 
     public static String getName() {
