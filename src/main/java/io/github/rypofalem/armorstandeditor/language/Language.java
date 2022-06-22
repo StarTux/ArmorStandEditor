@@ -29,6 +29,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import static java.util.Objects.requireNonNull;
 
 public final class Language {
     protected static final String DEFAULTLANG = "en_US.yml";
@@ -46,8 +47,7 @@ public final class Language {
         if (langFileName == null) langFileName = DEFAULTLANG;
         File langFolder = new File(plugin.getDataFolder().getPath() + File.separator + "lang");
         langFile = new File(langFolder, langFileName);
-        InputStream input = plugin.getResource("lang" + "/" + DEFAULTLANG);
-        assert input != null;
+        InputStream input = requireNonNull(plugin.getResource("lang" + "/" + DEFAULTLANG));
         Reader defaultLangStream = new InputStreamReader(input, StandardCharsets.UTF_8);
         defConfig = YamlConfiguration.loadConfiguration(defaultLangStream);
         input = null;

@@ -33,6 +33,7 @@ import org.bukkit.persistence.PersistentDataType;
 import static net.kyori.adventure.text.Component.text;
 
 import java.util.ArrayList;
+import static java.util.Objects.requireNonNull;
 
 public final class EquipmentMenu {
     Inventory menuInv;
@@ -55,8 +56,7 @@ public final class EquipmentMenu {
 
     private void fillInventory() {
         menuInv.clear();
-        EntityEquipment equipment = armorstand.getEquipment();
-        assert equipment != null;
+        EntityEquipment equipment = requireNonNull(armorstand.getEquipment());
         ItemStack theHelmet = equipment.getHelmet();
         ItemStack theChest = equipment.getChestplate();
         ItemStack thePants = equipment.getLeggings();
