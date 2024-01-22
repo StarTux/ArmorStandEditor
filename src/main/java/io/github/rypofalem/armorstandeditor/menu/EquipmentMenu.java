@@ -92,7 +92,7 @@ public final class EquipmentMenu {
         loreList.add(text(pe.plugin.getLang().getMessage("equipslot.description", "icondescription", slot))); //equioslot.description.msg <option>
         meta.lore(loreList);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
         icon.setItemMeta(meta);
         return icon;
     }
