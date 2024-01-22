@@ -152,6 +152,11 @@ public final class PlayerEditor {
     }
 
     private void openEquipment(ArmorStand armorStand) {
+        // We want to check if an Armor Stand inventory is currently
+        // open.  This should work rather reliably.
+        if (getPlayer().getOpenInventory().getType().isCreatable()) {
+            return;
+        }
         equipMenu = new EquipmentMenu(this, armorStand);
         equipMenu.open();
     }
