@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -56,6 +55,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacy;
 import static net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText;
 
 //Manages PlayerEditors and Player Events related to editing armorstands
@@ -117,16 +118,16 @@ public final class PlayerEditorManager implements Listener {
         //Attempt rename
         if (player.getInventory().getItemInMainHand().getType() == Material.NAME_TAG && player.hasPermission("asedit.rename")) {
             ItemStack nameTag = player.getInventory().getItemInMainHand();
-            final Component displayName;
+            Component displayName;
             if (nameTag.getItemMeta() != null && nameTag.getItemMeta().hasDisplayName()) {
                 String name = plainText().serialize(nameTag.getItemMeta().displayName());
                 if (name != null && player.hasPermission("asedit.rename.color")) {
-                    name = ChatColor.translateAlternateColorCodes('&', name);
+                    displayName = legacy('&').deserialize(name);
+                } else {
+                    displayName = text(name);
                 }
                 if (name != null && player.hasPermission("asedit.rename.emoji")) {
-                    displayName = Emoji.replaceText(name, GlyphPolicy.PUBLIC, false).asComponent();
-                } else {
-                    displayName = name != null && !name.isEmpty() ? Component.text(name) : null;
+                    displayName = Emoji.replaceText(displayName, GlyphPolicy.PUBLIC, false).asComponent();
                 }
             } else {
                 displayName = null;
@@ -140,10 +141,11 @@ public final class PlayerEditorManager implements Listener {
                 if ((player.getGameMode() != GameMode.CREATIVE)) {
                     nameTag.subtract(1);
                 }
-                //minecraft will set the name after this event even if the event is cancelled.
-                //change it 1 tick later to apply formatting without it being overwritten
+                // minecraft will set the name after this event even if the event is cancelled.
+                // change it 1 tick later to apply formatting without it being overwritten
+                final Component finalDisplayName = displayName;
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                        as.customName(displayName);
+                        as.customName(finalDisplayName);
                         as.setCustomNameVisible(true);
                     });
             }

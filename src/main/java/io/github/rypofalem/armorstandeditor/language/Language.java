@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import static java.util.Objects.requireNonNull;
 
@@ -71,7 +70,7 @@ public final class Language {
 
         format = getFormat(format);
         for (int i = 0; i < format.length(); i += 2) { //place formatting symbol before each character
-            format = format.substring(0, i) + ChatColor.COLOR_CHAR + format.substring(i);
+            format = format.substring(0, i) + '\u00A7' + format.substring(i);
         }
 
         if (getString(path + "." + option) != null) option = getString(path + "." + option);
@@ -86,40 +85,6 @@ public final class Language {
 
     public String getMessage(String path) {
         return getMessage(path, "info");
-    }
-
-    public String getRawMessage(String path, String format, String option) {
-        String message = ChatColor.stripColor(getMessage(path, format, option));
-        format = getFormat(format);
-        ChatColor color = ChatColor.WHITE;
-        String bold = "";
-        String italic = "";
-        String underlined = "";
-        String obfuscated = "";
-        String strikethrough = "";
-        for (int i = 0; i < format.length(); i++) {
-            ChatColor code = ChatColor.getByChar(format.charAt(i));
-            switch (code) {
-                case MAGIC:
-                    obfuscated = ", \"obfuscated\": true";
-                    break;
-                case BOLD:
-                    bold = ", \"bold\": true";
-                    break;
-                case STRIKETHROUGH:
-                    strikethrough = ", \"strikethrough\": true";
-                    break;
-                case UNDERLINE:
-                    underlined = ", \"underlined\": true";
-                    break;
-                case ITALIC:
-                    italic = ", \"italic\": true";
-                    break;
-                default: color = !code.isColor() ? color : code;
-            }
-        }
-        return String.format("{\"text\":\"%s\", \"color\":\"%s\"%s%s%s%s%s}", message, color.name().toLowerCase(),
-            obfuscated, bold, strikethrough, underlined, italic);
     }
 
     private String getFormat(String format) {

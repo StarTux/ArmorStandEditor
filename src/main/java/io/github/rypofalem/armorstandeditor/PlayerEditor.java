@@ -410,7 +410,7 @@ public final class PlayerEditor {
         return getManager().getTime() - lastCancelled < 2;
     }
 
-    private class OpenMenuTask implements Runnable {
+    private final class OpenMenuTask implements Runnable {
         @Override
         public void run() {
             if (isMenuCancelled()) return;

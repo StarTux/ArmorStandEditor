@@ -22,20 +22,22 @@ package io.github.rypofalem.armorstandeditor;
 import io.github.rypofalem.armorstandeditor.modes.AdjustmentMode;
 import io.github.rypofalem.armorstandeditor.modes.Axis;
 import io.github.rypofalem.armorstandeditor.modes.EditMode;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 
 public final class CommandEx implements CommandExecutor {
     ArmorStandEditorPlugin plugin;
-    protected static final String LISTMODE = ChatColor.GREEN + "/ase mode <" + Util.getEnumList(EditMode.class) + ">";
-    protected static final String LISTAXIS = ChatColor.GREEN + "/ase axis <" + Util.getEnumList(Axis.class) + ">";
-    protected static final String LISTADJUSTMENT = ChatColor.GREEN + "/ase adj <" + Util.getEnumList(AdjustmentMode.class) + ">";
-    protected static final String LISTSLOT =  ChatColor.GREEN + "/ase slot <1-9>";
-    protected static final String HELP = ChatColor.GREEN + "/ase help";
+    protected static final Component LISTMODE = text("/ase mode <" + Util.getEnumList(EditMode.class) + ">", GREEN);
+    protected static final Component LISTAXIS = text("/ase axis <" + Util.getEnumList(Axis.class) + ">", GREEN);
+    protected static final Component LISTADJUSTMENT = text("/ase adj <" + Util.getEnumList(AdjustmentMode.class) + ">", GREEN);
+    protected static final Component LISTSLOT = text("/ase slot <1-9>", GREEN);
+    protected static final Component HELP = text("/ase help", GREEN);
 
     public CommandEx(final ArmorStandEditorPlugin armorStandEditorPlugin) {
         this.plugin = armorStandEditorPlugin;
