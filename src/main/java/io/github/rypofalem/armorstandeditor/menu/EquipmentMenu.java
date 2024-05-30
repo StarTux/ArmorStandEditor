@@ -20,6 +20,10 @@
 package io.github.rypofalem.armorstandeditor.menu;
 
 import io.github.rypofalem.armorstandeditor.PlayerEditor;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -32,13 +36,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import static net.kyori.adventure.text.Component.text;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 import static java.util.Objects.requireNonNull;
+import static net.kyori.adventure.text.Component.text;
 
 public final class EquipmentMenu {
     Inventory menuInv;
@@ -92,7 +91,7 @@ public final class EquipmentMenu {
         loreList.add(text(pe.plugin.getLang().getMessage("equipslot.description", "icondescription", slot))); //equioslot.description.msg <option>
         meta.lore(loreList);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         icon.setItemMeta(meta);
         return icon;
     }
