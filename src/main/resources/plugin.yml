@@ -2,7 +2,7 @@ main: io.github.rypofalem.armorstandeditor.ArmorStandEditorPlugin
 name: ArmorStandEditor
 
 version: 1.17-25
-api-version: '1.20'
+api-version: '1.21'
 
 website: rypofalem.github.io
 author: RypoFalem
